@@ -4,7 +4,7 @@ import {AppComponent} from "./app.component";
 import {AppRouterModule} from "./app.router.module";
 import {AboutComponent} from "./about.component";
 import {MainComponent} from "./main.component";
-
+import {NotFoundComponent} from "./not-found.component";
 
 @NgModule({
   imports: [
@@ -14,7 +14,8 @@ import {MainComponent} from "./main.component";
   declarations: [
     AppComponent,
     AboutComponent,
-    MainComponent
+    MainComponent,
+    NotFoundComponent
   ],
   bootstrap: [AppComponent]
 })
