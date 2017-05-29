@@ -2,16 +2,39 @@ import {Jsonp, Http, Headers, RequestOptions, URLSearchParams, Response} from '@
 import { Article } from './article';
 //import { HEROES } from './mock-heroes';
 import { Injectable } from '@angular/core';
+import {Observable} from "rxjs";
 
 @Injectable()
 export class ArticleService {
 
-  constructor( private http: Http, private jsonp: Jsonp, ) {
-
+  public articles: Article[];
+  constructor( private http: Http, private jsonp: Jsonp ) {
   }
   siteUrl= window.location.origin+'/get-data';
   getArticles(): Promise<Article[]> {
-    return Promise.resolve(HEROES);
+    let params = new URLSearchParams();
+    params.set('action','articles');
+    params.set('callback','JSONP_CALLBACK');
+    return this.jsonp
+      .get(this.siteUrl, {search: params})
+      .toPromise()
+      .then(response => response.json().data as Article[])
+      .catch(this.handleError);
+      /*.map(response => {
+        if(response.status == 200) {
+          let array_data = response.json();
+          if(array_data.length > 0) {
+            var articles: Array<Article> = [];
+            for (let data of array_data) {
+              let article = new Article(data);
+              console.log(article);
+              articles.push(article);
+            }
+            this.articles = articles;
+            return this.articles;
+          }
+        }
+      });*/
   }
 
   getArticlesSlowly(): Promise<Article[]> {
@@ -23,7 +46,20 @@ export class ArticleService {
 
   getArticle(id: number): Promise<Article> {
     return this.getArticles()
-               .then(articles => articles.find(article => article.id === id));
+      .then(articles => articles.find(article => article.id === id));
+    /*if(this.getArticles()) {
+      for(let article of this.articles) {
+        if(id == article.id) {
+          return article;
+        }
+      }
+    }
+    return false;*/
+      //.find(article => article.id === id);
+  }
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
   }
   /*getMessages(id: number, next: string): Observable<Message[]> {
     let params = new URLSearchParams();

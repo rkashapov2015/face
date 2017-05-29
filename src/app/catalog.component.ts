@@ -14,7 +14,7 @@ import {ArticleService}         from './article.service';
   styleUrls: ['./catalog.component.css']
 })
 export class CatalogComponent implements OnInit {
-  arcticle: Article;
+  article: any;
 
   constructor(private articleService: ArticleService,
               private route: ActivatedRoute,
@@ -24,6 +24,6 @@ export class CatalogComponent implements OnInit {
   ngOnInit(): void {
     this.route.params
       .switchMap((params: Params) => this.articleService.getArticle(+params['id']))
-      .subscribe(article => this.arcticle = article);
+      .subscribe(article => this.article = article);
   }
 }
